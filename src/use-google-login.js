@@ -7,6 +7,8 @@ const useGoogleLogin = ({
   onAutoLoadFinished = () => {},
   onFailure = () => {},
   onRequest = () => {},
+  onScopeAddSuccess = () => {},
+  onScopeAddFailure = () => {},
   onScriptLoadFailure,
   clientId,
   cookiePolicy,
@@ -68,6 +70,21 @@ const useGoogleLogin = ({
           err => onFailure(err)
         )
       }
+    }
+  }
+
+  function addScopes(scopes) {
+    if (loaded) {
+      const auth = window.gapi.auth2.getAuthInstance()
+      const user = auth.currentUser.get()
+      user.grant({ scope: scopes }).then(
+        res => {
+          onScopeAddSuccess(res)
+        },
+        err => {
+          onScopeAddFailure(err)
+        }
+      )
     }
   }
 
@@ -156,7 +173,7 @@ const useGoogleLogin = ({
     }
   }, [loaded])
 
-  return { signIn, loaded }
+  return { signIn, loaded, addScopes }
 }
 
 export default useGoogleLogin
