@@ -1,6 +1,6 @@
 {
-  "name": "react-google-login",
-  "version": "5.1.3",
+  "name": "@supernormalco/react-google-login",
+  "version": "5.1.4",
   "description": "A Google Login Component for React",
   "main": "dist/google-login.js",
   "scripts": {
@@ -22,10 +22,7 @@
     "test",
     "lint"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anthonyjgrove/react-google-login.git"
-  },
+  "repository": "SuperNormalCo/react-google-login",
   "keywords": [
     "react",
     "reactjs",
