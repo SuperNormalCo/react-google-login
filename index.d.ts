@@ -153,6 +153,7 @@ export function useGoogleLogout(input: UseGoogleLogoutProps): UseGoogleLogoutRes
 
 export interface UseGoogleLoginResponse { 
   signIn: () => void;
+  addScopes: (scopes: string) => void;
   loaded: boolean;
 }
 
@@ -161,6 +162,8 @@ export interface UseGoogleLoginProps {
   readonly onFailure?: (error: any) => void,
   readonly onScriptLoadFailure?: (error: any) => void,
   readonly onAutoLoadFinished?: (successLogin: boolean) => void,
+  readonly onScopeAddSuccess?: (response: any) => void,
+  readonly onScopeAddFailure?: (error: any) => void,
   readonly clientId: string,
   readonly jsSrc?: string,
   readonly onRequest?: () => void,

@@ -1,6 +1,6 @@
 {
   "name": "@supernormalco/react-google-login",
-  "version": "5.1.4",
+  "version": "5.1.5",
   "description": "A Google Login Component for React",
   "main": "dist/google-login.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "storybook": "start-storybook -p 8080",
     "build-storybook": "npm run test:generate-output; build-storybook -c .storybook -o docs",
     "deploy-storybook": "storybook-to-ghpages --out=docs/",
+    "prepare": "npm run bundle",
     "release": "release-it --ci --no-git.requireCleanWorkingDir"
   },
   "pre-commit": [
