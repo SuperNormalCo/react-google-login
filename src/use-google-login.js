@@ -28,7 +28,7 @@ const useGoogleLogin = ({
 }) => {
   const [loaded, setLoaded] = useState(false)
 
-  function handleSigninSuccess(res) {
+  function handleSigninSuccess(res, callback) {
     /*
       offer renamed response keys to names that match use
     */
@@ -46,7 +46,7 @@ const useGoogleLogin = ({
       givenName: basicProfile.getGivenName(),
       familyName: basicProfile.getFamilyName()
     }
-    onSuccess(res)
+    callback(res)
   }
 
   function signIn(e) {
@@ -66,7 +66,7 @@ const useGoogleLogin = ({
         )
       } else {
         GoogleAuth.signIn(options).then(
-          res => handleSigninSuccess(res),
+          res => handleSigninSuccess(res, onSuccess),
           err => onFailure(err)
         )
       }
@@ -75,16 +75,22 @@ const useGoogleLogin = ({
 
   function addScopes(scopes) {
     if (loaded) {
+      const options = {
+        prompt
+      }
       const auth = window.gapi.auth2.getAuthInstance()
       const user = auth.currentUser.get()
-      user.grant({ scope: scopes }).then(
-        res => {
-          onScopeAddSuccess(res)
-        },
-        err => {
-          onScopeAddFailure(err)
-        }
-      )
+      if (responseType === 'code') {
+        auth.grantOfflineAccess({ ...options, scope: scopes }).then(
+          res => onScopeAddSuccess(res),
+          err => onScopeAddFailure(err)
+        )
+      } else {
+        user.grant({ ...options, scope: scopes }).then(
+          res => handleSigninSuccess(res, onScopeAddSuccess),
+          err => onScopeAddFailure(err)
+        )
+      }
     }
   }
 
@@ -124,7 +130,7 @@ const useGoogleLogin = ({
                   const signedIn = isSignedIn && res.isSignedIn.get()
                   onAutoLoadFinished(signedIn)
                   if (signedIn) {
-                    handleSigninSuccess(res.currentUser.get())
+                    handleSigninSuccess(res.currentUser.get(), onSuccess)
                   }
                 }
               },
@@ -143,7 +149,7 @@ const useGoogleLogin = ({
                 if (isSignedIn && GoogleAuth.isSignedIn.get()) {
                   setLoaded(true)
                   onAutoLoadFinished(true)
-                  handleSigninSuccess(GoogleAuth.currentUser.get())
+                  handleSigninSuccess(GoogleAuth.currentUser.get(), onSuccess)
                 } else {
                   setLoaded(true)
                   onAutoLoadFinished(false)
