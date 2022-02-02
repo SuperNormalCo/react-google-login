@@ -38,8 +38,8 @@ jobs:
         run: npm run bundle --if-present
       - name: Token
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-        run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
+          NODE_AUTH_TOKEN: ${{ secrets.CI_PACKAGES_TOKEN }}
+        run: echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
 
       - name: Publish
         env:
